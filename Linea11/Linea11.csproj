@@ -9,13 +9,14 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Linea11</RootNamespace>
     <AssemblyName>Linea11</AssemblyName>
-    <DefaultLanguage>en-US</DefaultLanguage>
+    <DefaultLanguage>es-ES</DefaultLanguage>
     <TargetPlatformVersion>8.1</TargetPlatformVersion>
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <NuGetPackageImportStamp>e7dab634</NuGetPackageImportStamp>
     <ApplicationInsightsResourceId>/subscriptions/70ccccac-1295-4863-a3e0-a43e6c1617aa/resourcegroups/Default-ApplicationInsights-CentralUS/providers/microsoft.insights/components/Linea11</ApplicationInsightsResourceId>
+    <AppxBundle>Never</AppxBundle>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -89,7 +90,15 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainPage.xaml.cs">
+    <Compile Include="Domain\Linea.cs" />
+    <Compile Include="Services\Exceptions\InternalErrorException.cs" />
+    <Compile Include="Services\Interface\IApiConsumer.cs" />
+    <Compile Include="Services\Interface\ILineaRepository.cs" />
+    <Compile Include="Services\LineaRepository.cs" />
+    <Compile Include="Services\SimpleApiConsumer.cs" />
+    <Compile Include="ViewModels\Interface\ILineasViewModel.cs" />
+    <Compile Include="ViewModels\LineasViewModel.cs" />
+    <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -112,7 +121,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="MainPage.xaml">
+    <Page Include="Views\MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -133,6 +142,9 @@
       <Project>{f8cb98dd-0465-49fd-9952-34e5a28888f2}</Project>
       <Name>SaS</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Styles\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

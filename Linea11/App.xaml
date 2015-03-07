@@ -2,6 +2,12 @@
     x:Class="Linea11.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Linea11">
+    xmlns:local="using:Linea11"
+    xmlns:vm="using:Linea11.ViewModels"
+    RequestedTheme="Light">
+    
+    <Application.Resources>
+        <vm:LineasViewModel x:Key="Lineas" />
+    </Application.Resources>
 
 </Application>
