@@ -10,12 +10,13 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     DataContext="{Binding Source={StaticResource Lineas}}">
 
-    <Grid Margin="20,0">
+    <Grid x:Name="RootContent" Margin="20,0">
     	<Grid.RowDefinitions>
     		<RowDefinition Height="Auto"/>
     		<RowDefinition/>
     	</Grid.RowDefinitions>
     	<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="LINEAS" VerticalAlignment="Top" Style="{StaticResource TitleTextBlockStyle}"/>
+    	<GridView Grid.Row="1" ItemsSource="{Binding Lineas}" ItemTemplate="{StaticResource LineasListaStyle}" Padding="0,0,0,15" Margin="0,20,0,0"/>
 
     </Grid>
 </common:BasePage>

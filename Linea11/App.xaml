@@ -4,10 +4,21 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Linea11"
     xmlns:vm="using:Linea11.ViewModels"
+    xmlns:c="using:SaS.Converter"
     RequestedTheme="Light">
     
     <Application.Resources>
-        <vm:LineasViewModel x:Key="Lineas" />
+    	<ResourceDictionary>
+    		<ResourceDictionary.MergedDictionaries>
+    			<ResourceDictionary Source="Styles/CustomDictionary.xaml"/>
+    		</ResourceDictionary.MergedDictionaries>
+            
+            <!-- Converter -->
+            <c:StringToColorConverter x:Key="StringToColorConverter" />
+            
+            <!-- ViewModels -->
+    		<vm:LineasViewModel x:Key="Lineas" />
+    	</ResourceDictionary>
     </Application.Resources>
 
 </Application>

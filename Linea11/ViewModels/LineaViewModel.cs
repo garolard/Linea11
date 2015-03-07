@@ -1,11 +1,15 @@
 ﻿using Linea11.Domain;
 using Linea11.ViewModels.Interface;
+using Linea11.Views;
 using SaS.Common;
+using SaS.Service.Interface;
+using SaS.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Linea11.ViewModels
 {
@@ -13,6 +17,7 @@ namespace Linea11.ViewModels
     {
         #region Members
         Linea _linea;
+        INavigationService _navigationService;
         #endregion Members
 
         #region Properties
@@ -106,18 +111,36 @@ namespace Linea11.ViewModels
         }
         #endregion Properties
 
+        #region Commands
+        public ICommand ViewLineDetailCommand { get; private set; }
+        #endregion Commands
+
+        #region Command handlers
+        void ViewLineDetail()
+        {
+            _navigationService.NavigateTo<LineDetailPage>(_linea);
+        }
+        #endregion Command handlers
+
         public LineaViewModel() : base()
-        { }
+        {
+            _navigationService = new NavigationService();
+
+            ViewLineDetailCommand = new RelayCommand(ViewLineDetail);
+        }
 
         public LineaViewModel(Linea linea) : base()
         {
-            this._linea = linea;
+            _linea = linea;
+            _navigationService = new NavigationService();
+
+            ViewLineDetailCommand = new RelayCommand(ViewLineDetail);
         }
 
         #region Navigation
         public override Task OnNavigatedFrom(Windows.UI.Xaml.Navigation.NavigationEventArgs args)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public override Task OnNavigatingFrom(Windows.UI.Xaml.Navigation.NavigatingCancelEventArgs args)
@@ -127,7 +150,7 @@ namespace Linea11.ViewModels
 
         public override Task OnNavigatedTo(Windows.UI.Xaml.Navigation.NavigationEventArgs args)
         {
-            throw new NotImplementedException();
+            return null;
         }
         #endregion Navigation
     }

@@ -19,7 +19,7 @@ namespace Linea11.ViewModels
         #endregion Members
 
         #region Properties
-        IList<ILineaViewModel> Lineas
+        public IList<ILineaViewModel> Lineas
         {
             get { return _allLines; }
             set

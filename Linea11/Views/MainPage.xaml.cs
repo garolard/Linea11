@@ -23,7 +23,7 @@ namespace Linea11
     /// </summary>
     public sealed partial class MainPage : BasePage
     {
-        public MainPage()
+        public MainPage() : base()
         {
             this.InitializeComponent();
 
