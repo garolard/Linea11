@@ -13,7 +13,25 @@ namespace Linea11.ViewModels
 {
     class LineasViewModel : BaseViewModel, ILineasViewModel
     {
+        #region Members
         ILineaRepository _lineaRepository;
+        IList<ILineaViewModel> _allLines;
+        #endregion Members
+
+        #region Properties
+        IList<ILineaViewModel> Lineas
+        {
+            get { return _allLines; }
+            set
+            {
+                if (value != _allLines)
+                {
+                    _allLines = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+        #endregion Properties
 
         public LineasViewModel()
         {
@@ -35,7 +53,7 @@ namespace Linea11.ViewModels
         {
             try
             {
-                IList<Domain.Linea> allLines = await _lineaRepository.ListAllAsync();
+                Lineas = await _lineaRepository.ListAllAsync();
             }
             catch (InternalErrorException e)
             {

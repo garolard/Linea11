@@ -97,7 +97,9 @@
     <Compile Include="Services\LineaRepository.cs" />
     <Compile Include="Services\SimpleApiConsumer.cs" />
     <Compile Include="ViewModels\Interface\ILineasViewModel.cs" />
+    <Compile Include="ViewModels\Interface\ILineaViewModel.cs" />
     <Compile Include="ViewModels\LineasViewModel.cs" />
+    <Compile Include="ViewModels\LineaViewModel.cs" />
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>

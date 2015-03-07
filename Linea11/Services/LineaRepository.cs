@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Data.Json;
 using Windows.Web.Http;
+using Linea11.ViewModels.Interface;
+using Linea11.ViewModels;
 
 namespace Linea11.Services
 {
@@ -16,7 +18,7 @@ namespace Linea11.Services
     {
         const string DOMAIN = "http://itranvias.es/queryitr.php?";
 
-        async public Task<IList<Domain.Linea>> ListAllAsync()
+        async public Task<IList<ILineaViewModel>> ListAllAsync()
         {
             // Request creation
             StringBuilder sb = new StringBuilder(DOMAIN);
@@ -44,12 +46,16 @@ namespace Linea11.Services
             }
 
             // Response parsing
-            IList<Linea> allLines = new List<Linea>();
+            IList<ILineaViewModel> allLinesViewModels = new List<ILineaViewModel>();
             if (!string.Empty.Equals(response))
             {
                 try
                 {
-                    allLines = ParseAndListAllLines(response);
+                    IList<Domain.Linea> allLines = ParseAndListAllLines(response);
+                    foreach (Domain.Linea line in allLines)
+                    {
+                        allLinesViewModels.Add(new LineaViewModel(line));
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -57,7 +63,7 @@ namespace Linea11.Services
                 }
             }
 
-            return allLines;
+            return allLinesViewModels;
         }
 
         private IList<Linea> ParseAndListAllLines(string json)
