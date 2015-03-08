@@ -17,6 +17,7 @@ namespace Linea11.ViewModels
     {
         #region Members
         Linea _linea;
+        IList<IParadaViewModel> _paradas;
         INavigationService _navigationService;
         #endregion Members
 
@@ -106,6 +107,19 @@ namespace Linea11.ViewModels
                 if (value != _linea.DestinoVuelta)
                 {
                     _linea.DestinoVuelta = value;
+                }
+            }
+        }
+
+        public IList<IParadaViewModel> Paradas
+        {
+            get { return _paradas; }
+            set
+            {
+                if (value != _paradas)
+                {
+                    _paradas = value;
+                    RaisePropertyChanged();
                 }
             }
         }

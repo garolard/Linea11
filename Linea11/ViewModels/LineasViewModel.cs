@@ -3,6 +3,8 @@ using Linea11.Services.Exceptions;
 using Linea11.Services.Interface;
 using Linea11.ViewModels.Interface;
 using Linea11.Common;
+using SaS.Service.Interface;
+using SaS.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +17,10 @@ namespace Linea11.ViewModels
     {
         #region Members
         ILineaRepository _lineaRepository;
+
+        IInternetService _internetService;
+        IDialogService _dialogService;
+
         IList<ILineaViewModel> _allLines;
         #endregion Members
 
@@ -36,6 +42,9 @@ namespace Linea11.ViewModels
         public LineasViewModel()
         {
             _lineaRepository = new LineaRepository();
+
+            _internetService = new InternetService();
+            _dialogService = new DialogService();
         }
 
         #region Navigation
@@ -51,6 +60,12 @@ namespace Linea11.ViewModels
 
         async public override Task OnNavigatedTo(Windows.UI.Xaml.Navigation.NavigationEventArgs args)
         {
+            if (!_internetService.IsConnected())
+            {
+                await _dialogService.ShowDialogAsync("no hay internet");
+                return;
+            }
+
             try
             {
                 Lineas = await _lineaRepository.ListAllAsync();
