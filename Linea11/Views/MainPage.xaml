@@ -16,7 +16,14 @@
     		<RowDefinition/>
     	</Grid.RowDefinitions>
     	<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="LINEAS" VerticalAlignment="Top" Style="{StaticResource TitleTextBlockStyle}"/>
-    	<GridView Grid.Row="1" ItemsSource="{Binding Lineas}" ItemTemplate="{StaticResource LineasListaStyle}" Padding="0,0,0,15" Margin="0,20,0,0"/>
+    	<GridView Grid.Row="1" ItemsSource="{Binding Lineas}" ItemTemplate="{StaticResource LineasListaStyle}" Padding="0,0,0,15" Margin="0,20,0,0">
+    		<GridView.ItemContainerTransitions>
+    			<TransitionCollection>
+    				<EntranceThemeTransition FromVerticalOffset="120" FromHorizontalOffset="0"/>
+    			</TransitionCollection>
+    		</GridView.ItemContainerTransitions>
+    	</GridView>
+    	<ProgressRing Grid.RowSpan="2" Width="60" Height="60" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
     </Grid>
 </common:BasePage>

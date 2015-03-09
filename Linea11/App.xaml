@@ -16,6 +16,7 @@
             <!-- Converter -->
             <c:StringToColorConverter x:Key="StringToColorConverter" />
             <c:StringToUpperConverter x:Key="StringToUpperConverter" />
+            <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             
             <!-- ViewModels -->
     		<vm:LineasViewModel x:Key="Lineas" />
