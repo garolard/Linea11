@@ -66,18 +66,21 @@ namespace Linea11.ViewModels
                 return;
             }
 
-            try
+            if (Lineas == null)
             {
-                IsBusy = true;
-                Lineas = await _lineaRepository.ListAllAsync();
-            }
-            catch (InternalErrorException e)
-            {
-                System.Diagnostics.Debug.WriteLine(e.Message);
-            }
-            finally
-            {
-                IsBusy = false;
+                try
+                {
+                    IsBusy = true;
+                    Lineas = await _lineaRepository.ListAllAsync();
+                }
+                catch (InternalErrorException e)
+                {
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+                }
+                finally
+                {
+                    IsBusy = false;
+                }
             }
             return;
         }

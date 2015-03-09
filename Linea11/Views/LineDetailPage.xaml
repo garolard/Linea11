@@ -22,7 +22,14 @@
     		<TextBlock TextWrapping="Wrap" Text=" - " VerticalAlignment="Center"/>
     		<TextBlock x:Name="lineDestinyText" TextWrapping="Wrap" Text="{Binding DestinoLinea, Converter={StaticResource StringToUpperConverter}}" VerticalAlignment="Center" FontSize="13.333" FontWeight="Bold" Margin="10,0,0,0"/>
     	</StackPanel>
-    	<ListView Grid.Row="1" Margin="20,10,20,0"/>
+    	<ListView Grid.Row="1" Margin="20,10,20,0" ItemsSource="{Binding ParadasIda}" ItemTemplate="{StaticResource ListaParadaItemTemplate}">
+    		<ListView.ItemContainerTransitions>
+    			<TransitionCollection>
+    				<EntranceThemeTransition FromHorizontalOffset="45"/>
+    			</TransitionCollection>
+    		</ListView.ItemContainerTransitions>
+    	</ListView>
+    	<ProgressRing Grid.RowSpan="2" Width="60" Height="60" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" IsActive="{Binding IsBusy}"/>
 
     </Grid>
 </common:BasePage>

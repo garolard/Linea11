@@ -15,5 +15,10 @@
 			<TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="{Binding NombreComercial}" VerticalAlignment="Bottom" Margin="0,0,20,0" Style="{StaticResource HeaderTextBlockStyle}" FontWeight="Bold"/>
 		</Grid>
 	</DataTemplate>
+	<DataTemplate x:Key="ListaParadaItemTemplate">
+		<Grid>
+			<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding NombreParada}" VerticalAlignment="Top"/>
+		</Grid>
+	</DataTemplate>
     
 </ResourceDictionary>

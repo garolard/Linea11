@@ -102,7 +102,9 @@
     <Compile Include="Services\Exceptions\InternalErrorException.cs" />
     <Compile Include="Services\Interface\IApiConsumer.cs" />
     <Compile Include="Services\Interface\ILineaRepository.cs" />
+    <Compile Include="Services\Interface\IParadaRepository.cs" />
     <Compile Include="Services\LineaRepository.cs" />
+    <Compile Include="Services\ParadaRepository.cs" />
     <Compile Include="Services\SimpleApiConsumer.cs" />
     <Compile Include="ViewModels\Interface\ILineasViewModel.cs" />
     <Compile Include="ViewModels\Interface\ILineaViewModel.cs" />

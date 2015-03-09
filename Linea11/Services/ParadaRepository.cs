@@ -1,32 +1,32 @@
-﻿using Linea11.Domain;
-using Linea11.Services;
-using Linea11.Services.Exceptions;
-using Linea11.Services.Interface;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.Data.Json;
+using Linea11.Services.Interface;
+using Linea11.Domain;
+using Linea11.Common;
 using Windows.Web.Http;
+using Linea11.Services.Exceptions;
 using Linea11.ViewModels.Interface;
 using Linea11.ViewModels;
+using Windows.Data.Json;
 
 namespace Linea11.Services
 {
-    class LineaRepository : ILineaRepository
+    class ParadaRepository : IParadaRepository
     {
         const string DOMAIN = "http://itranvias.es/queryitr.php?";
 
-        async public Task<IList<ILineaViewModel>> ListAllAsync()
+        async public Task<IList<ViewModels.Interface.IParadaViewModel>> FindAll(int lineId)
         {
             // Request creation
             StringBuilder sb = new StringBuilder(DOMAIN);
-            sb.Append("dato=0");
+            sb.Append("dato=").Append(lineId);
             sb.Append("&");
-            sb.Append("func=1");
+            sb.Append("func=2");
             sb.Append("&");
-            sb.Append("_=" + DateTimeOffset.Now.Millisecond.ToString());
+            sb.Append("_=").Append(DateTimeOffset.Now.Millisecond.ToString());
             HttpRequestMessage req = new HttpRequestMessage()
             {
                 Method = HttpMethod.Get,
@@ -46,15 +46,15 @@ namespace Linea11.Services
             }
 
             // Response parsing
-            IList<ILineaViewModel> allLinesViewModels = new List<ILineaViewModel>();
+            IList<IParadaViewModel> allStopViewModels = new List<IParadaViewModel>();
             if (!string.Empty.Equals(response))
             {
                 try
                 {
-                    IList<Domain.Linea> allLines = ParseAndListAllLines(response);
-                    foreach (Domain.Linea line in allLines)
+                    IList<Domain.Parada> allStops = ParseAndListAllStops(response);
+                    foreach (Domain.Parada stop in allStops)
                     {
-                        allLinesViewModels.Add(new LineaViewModel(line));
+                        allStopViewModels.Add(new ParadaViewModel(stop));
                     }
                 }
                 catch (Exception ex)
@@ -63,55 +63,57 @@ namespace Linea11.Services
                 }
             }
 
-            return allLinesViewModels;
+            return allStopViewModels;
         }
 
-        private IList<Linea> ParseAndListAllLines(string json)
+        private IList<Parada> ParseAndListAllStops(string json)
         {
-            IList<Linea> allLines = new List<Linea>();
+            IList<Parada> allStops = new List<Parada>();
+
             JsonValue root;
-            JsonArray linesArray;
+            JsonArray stopsArray;
 
             if (JsonValue.TryParse(json, out root))
             {
                 JsonObject obj = root.GetObject();
-                if (obj.ContainsKey("lineas"))
+                JsonArray stops = obj.GetNamedArray("paradas");
+                for (int i = 0, total = stops.Count; i < total; i++)
                 {
-                    linesArray = obj.GetNamedArray("lineas");
-                    allLines = ExtractLines(linesArray);
+                    JsonObject stopsInArray = stops.GetObjectAt((uint)i);
+                    stopsArray = stopsInArray.GetNamedArray("paradas");
+                    foreach (Parada p in ExtractStops(stopsArray, i))
+                    {
+                        allStops.Add(p);
+                    }
                 }
             }
 
-            return allLines;
+            return allStops;
         }
 
-        private IList<Linea> ExtractLines(JsonArray array)
+        private IList<Parada> ExtractStops(JsonArray array, int direction)
         {
-            IList<Linea> lines = new List<Linea>();
+            IList<Parada> stops = new List<Parada>();
 
             if (array == null)
-                throw new ArgumentNullException("array", "El array de lineas en respuesta JSON es nulo o no existe.");
+                throw new ArgumentNullException("array", "El array de paradas en respuesta JSON es nulo o no existe.");
 
             if (!array.Any())
-                return lines;
+                return stops;
 
             foreach (JsonValue value in array)
             {
                 JsonObject entry = value.GetObject();
-                Linea line = new Linea()
+                Parada stop = new Parada()
                 {
                     Id = Int32.Parse(entry.GetNamedString("id")),
-                    NombreComercial = entry.GetNamedString("nom_comer"),
-                    ColorLinea = entry.GetNamedString("color_linea"),
-                    OrigenLinea = entry.GetNamedString("orig_linea"),
-                    DestinoLinea = entry.GetNamedString("dest_linea"),
-                    DestinoIda = entry.GetNamedString("dest_ida"),
-                    DestinoVuelta = entry.GetNamedString("dest_vuelta")
+                    NombreParada = entry.GetNamedString("parada"),
+                    Sentido = direction == 0 ? Sentido.IDA : Sentido.VUELTA
                 };
-                lines.Add(line);
+                stops.Add(stop);
             }
 
-            return lines;
+            return stops;
         }
     }
 }

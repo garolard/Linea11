@@ -10,6 +10,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Linea11.Services.Interface;
+using Linea11.Services;
+using Linea11.Services.Exceptions;
 
 namespace Linea11.ViewModels
 {
@@ -17,7 +20,11 @@ namespace Linea11.ViewModels
     {
         #region Members
         Linea _linea;
-        IList<IParadaViewModel> _paradas;
+
+        IEnumerable<IParadaViewModel> _paradasIda;
+        IEnumerable<IParadaViewModel> _paradasVuelta;
+
+        IParadaRepository _paradaRepository;
         INavigationService _navigationService;
         #endregion Members
 
@@ -111,14 +118,27 @@ namespace Linea11.ViewModels
             }
         }
 
-        public IList<IParadaViewModel> Paradas
+        public IEnumerable<IParadaViewModel> ParadasIda
         {
-            get { return _paradas; }
+            get { return _paradasIda; }
             set
             {
-                if (value != _paradas)
+                if (value != _paradasIda)
                 {
-                    _paradas = value;
+                    _paradasIda = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+        public IEnumerable<IParadaViewModel> ParadasVuelta
+        {
+            get { return _paradasVuelta; }
+            set
+            {
+                if (value != _paradasVuelta)
+                {
+                    _paradasVuelta = value;
                     RaisePropertyChanged();
                 }
             }
@@ -138,6 +158,7 @@ namespace Linea11.ViewModels
 
         public LineaViewModel() : base()
         {
+            _paradaRepository = new ParadaRepository();
             _navigationService = new NavigationService();
 
             ViewLineDetailCommand = new RelayCommand(ViewLineDetail);
@@ -146,6 +167,8 @@ namespace Linea11.ViewModels
         public LineaViewModel(Linea linea) : base()
         {
             _linea = linea;
+
+            _paradaRepository = new ParadaRepository();
             _navigationService = new NavigationService();
 
             ViewLineDetailCommand = new RelayCommand(ViewLineDetail);
@@ -162,9 +185,28 @@ namespace Linea11.ViewModels
             throw new NotImplementedException();
         }
 
-        public override Task OnNavigatedTo(Windows.UI.Xaml.Navigation.NavigationEventArgs args)
+        async public override Task OnNavigatedTo(Windows.UI.Xaml.Navigation.NavigationEventArgs args)
         {
-            return null;
+            if (_linea != null && _paradasIda == null || _paradasVuelta == null)
+            {
+                try
+                {
+                    IsBusy = true;
+                    IList<IParadaViewModel> stops = await _paradaRepository.FindAll(_linea.Id);
+
+                    ParadasIda = stops.Where(s => s.Sentido == Sentido.IDA);
+                    ParadasVuelta = stops.Where(s => s.Sentido == Sentido.VUELTA);
+                }
+                catch (InternalErrorException ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                }
+                finally
+                {
+                    IsBusy = false;
+                }
+            }
+            return;
         }
         #endregion Navigation
     }
