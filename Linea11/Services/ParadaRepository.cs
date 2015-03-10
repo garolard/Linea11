@@ -104,16 +104,37 @@ namespace Linea11.Services
             foreach (JsonValue value in array)
             {
                 JsonObject entry = value.GetObject();
+                IEnumerable<Linea> stopLinks = ExtractLinks(entry);
                 Parada stop = new Parada()
                 {
                     Id = Int32.Parse(entry.GetNamedString("id")),
                     NombreParada = entry.GetNamedString("parada"),
-                    Sentido = direction == 0 ? Sentido.IDA : Sentido.VUELTA
+                    Sentido = direction == 0 ? Sentido.IDA : Sentido.VUELTA,
+                    Enlaces = stopLinks
                 };
                 stops.Add(stop);
             }
 
             return stops;
+        }
+
+        private IEnumerable<Linea> ExtractLinks(JsonObject stopValue)
+        {
+            IList<Linea> links = new List<Linea>();
+            JsonArray linksArray = stopValue.GetNamedArray("enlaces");
+
+            foreach (JsonValue value in linksArray)
+            {
+                JsonObject entry = value.GetObject();
+                Linea link = new Linea()
+                {
+                    NombreComercial = entry.GetNamedString("nom_comer"),
+                    ColorLinea = entry.GetNamedString("color_linea")
+                };
+                links.Add(link);
+            }
+
+            return links;
         }
     }
 }

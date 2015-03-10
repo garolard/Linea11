@@ -16,6 +16,9 @@ namespace Linea11.Domain
 
         // calculated
         public Sentido Sentido { get; set; }
+
+        // enlaces
+        public IEnumerable<Linea> Enlaces { get; set; }
     }
 
     enum Sentido 

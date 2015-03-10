@@ -44,5 +44,62 @@ namespace Linea11.Views
             }
             base.OnNavigatedTo(e);
         }
+
+        private void ForwardStopsListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
+        {
+            args.Handled = true;
+
+            if (args.Phase != 0)
+                throw new Exception("Not in phase 0");
+
+            args.RegisterUpdateCallback(ShowStopName);
+        }
+
+        private void ShowStopName(ListViewBase sender, ContainerContentChangingEventArgs args)
+        {
+            if (args.Phase != 1)
+                throw new Exception("Not in phase 1");
+
+            ViewModels.ParadaViewModel stop = args.Item as ViewModels.ParadaViewModel;
+            if (stop != null)
+            {
+                Grid itemContainer = (Grid)args.ItemContainer.ContentTemplateRoot;
+                TextBlock stopName = itemContainer.FindName("stopName") as TextBlock;
+                if (stopName != null)
+                {
+                    stopName.Text = stop.NombreParada;
+                }
+            }
+
+            args.RegisterUpdateCallback(ShowLinks);
+        }
+
+        private void ShowLinks(ListViewBase sender, ContainerContentChangingEventArgs args)
+        {
+            if (args.Phase != 2)
+                throw new Exception("Not in phase 2");
+
+            ViewModels.ParadaViewModel stop = args.Item as ViewModels.ParadaViewModel;
+            if (stop != null)
+            {
+                Grid itemContainer = (Grid)args.ItemContainer.ContentTemplateRoot;
+                StackPanel linksContainer = itemContainer.FindName("linksContainer") as StackPanel;
+                if (linksContainer != null)
+                {
+                    foreach (Linea link in stop.Enlaces)
+                    {
+                        IValueConverter stringToColorConverter = App.Current.Resources["StringToColorConverter"] as IValueConverter;
+                        Grid enlaceContainer = new Grid();
+                        enlaceContainer.Background = (SolidColorBrush)stringToColorConverter.Convert(link.ColorLinea, typeof(SolidColorBrush), null, null);
+                        TextBlock nombreEnlaceTextBlock = new TextBlock() { Text = link.NombreComercial, FontSize = 18 };
+                        nombreEnlaceTextBlock.Margin = new Thickness(5, 0, 5, 0);
+                        enlaceContainer.Children.Add(nombreEnlaceTextBlock);
+                        linksContainer.Children.Add(enlaceContainer);
+                    }
+                }
+            }
+
+            ((Grid)args.ItemContainer.ContentTemplateRoot).DataContext = args.Item as Parada;
+        }
     }
 }

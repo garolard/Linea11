@@ -54,6 +54,18 @@ namespace Linea11.ViewModels
                 }
             }
         }
+
+        public IEnumerable<Linea> Enlaces
+        {
+            get { return _parada.Enlaces; }
+            set
+            {
+                if (value != _parada.Enlaces)
+                {
+                    _parada.Enlaces = value;
+                }
+            }
+        }
         #endregion Properties
 
         #region Commands
