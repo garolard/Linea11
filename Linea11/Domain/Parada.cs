@@ -19,6 +19,9 @@ namespace Linea11.Domain
 
         // enlaces
         public IEnumerable<Linea> Enlaces { get; set; }
+
+        // buses
+        public IEnumerable<Bus> Buses { get; set; }
     }
 
     enum Sentido 

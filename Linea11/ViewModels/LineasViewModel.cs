@@ -39,6 +39,7 @@ namespace Linea11.ViewModels
         }
         #endregion Properties
 
+        #region Constructor
         public LineasViewModel()
         {
             _lineaRepository = new LineaRepository();
@@ -46,6 +47,7 @@ namespace Linea11.ViewModels
             _internetService = new InternetService();
             _dialogService = new DialogService();
         }
+        #endregion Constructor
 
         #region Navigation
         public override Task OnNavigatedFrom(Windows.UI.Xaml.Navigation.NavigationEventArgs args)

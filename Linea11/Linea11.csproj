@@ -97,6 +97,7 @@
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
+    <Compile Include="Domain\Bus.cs" />
     <Compile Include="Domain\Linea.cs" />
     <Compile Include="Domain\Parada.cs" />
     <Compile Include="Services\Exceptions\InternalErrorException.cs" />

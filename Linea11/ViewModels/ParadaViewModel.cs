@@ -29,6 +29,8 @@ namespace Linea11.ViewModels
             }
         }
 
+        public int IdLinea { get; set; }
+
         public string NombreParada
         {
             get { return _parada.NombreParada; }
@@ -64,6 +66,27 @@ namespace Linea11.ViewModels
                 {
                     _parada.Enlaces = value;
                 }
+            }
+        }
+
+        public IEnumerable<Bus> Buses
+        {
+            get { return _parada.Buses; }
+            set
+            {
+                if (value != _parada.Buses)
+                {
+                    _parada.Buses = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+        public bool HayBusDeLinea
+        {
+            get
+            {
+                return _parada.Buses.Any( b => b.Linea == IdLinea);
             }
         }
         #endregion Properties

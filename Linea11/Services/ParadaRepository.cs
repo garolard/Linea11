@@ -54,7 +54,9 @@ namespace Linea11.Services
                     IList<Domain.Parada> allStops = ParseAndListAllStops(response);
                     foreach (Domain.Parada stop in allStops)
                     {
-                        allStopViewModels.Add(new ParadaViewModel(stop));
+                        var paradaVM = new ParadaViewModel(stop);
+                        paradaVM.IdLinea = lineId;
+                        allStopViewModels.Add(paradaVM);
                     }
                 }
                 catch (Exception ex)
@@ -104,18 +106,46 @@ namespace Linea11.Services
             foreach (JsonValue value in array)
             {
                 JsonObject entry = value.GetObject();
+                IEnumerable<Bus> stopBuses = ExtractBuses(entry);
                 IEnumerable<Linea> stopLinks = ExtractLinks(entry);
                 Parada stop = new Parada()
                 {
                     Id = Int32.Parse(entry.GetNamedString("id")),
                     NombreParada = entry.GetNamedString("parada"),
                     Sentido = direction == 0 ? Sentido.IDA : Sentido.VUELTA,
+                    Buses = stopBuses,
                     Enlaces = stopLinks
                 };
                 stops.Add(stop);
             }
 
             return stops;
+        }
+
+        private IEnumerable<Bus> ExtractBuses(JsonObject stopValue)
+        {
+            IList<Bus> buses = new List<Bus>();
+
+            if (!stopValue.ContainsKey("buses"))
+                return buses;
+
+            JsonArray busesArray = stopValue.GetNamedArray("buses");
+
+            foreach (JsonValue value in busesArray)
+            {
+                JsonObject entry = value.GetObject();
+                Bus bus = new Bus()
+                {
+                    Id = Int32.Parse(entry.GetNamedString("bus")),
+                    Linea = Int32.Parse(entry.GetNamedString("linea")),
+                    Adaptado = "1".Equals(entry.GetNamedString("adaptado")) ? true : false,
+                    Metros = Int32.Parse(entry.GetNamedString("metros")),
+                    ColorLinea = entry.GetNamedString("color_linea")
+                };
+                buses.Add(bus);
+            }
+
+            return buses;
         }
 
         private IEnumerable<Linea> ExtractLinks(JsonObject stopValue)

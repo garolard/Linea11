@@ -10,6 +10,7 @@ namespace Linea11.ViewModels.Interface
     interface IParadaViewModel
     {
         int Id { get; set; }
+        int IdLinea { get; set; }
         string NombreParada { get; set; }
         Sentido Sentido { get; set; }
     }

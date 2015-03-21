@@ -4,8 +4,14 @@
     xmlns:local="using:Linea11.Styles"
     xmlns:i="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d">
+    
+    <!-- Storyboards -->
+    
+    
+    <!-- DataTemplates -->
 	<DataTemplate x:Key="LineasListaStyle">
-		<Grid Width="160" Height="160" Background="{Binding ColorLinea, Converter={StaticResource StringToColorConverter}}" Margin="0,0,5,5">
+		<Grid Width="160" Height="160" 
+              Background="{Binding ColorLinea, Converter={StaticResource StringToColorConverter}}" Margin="0,0,5,5">
 			<i:Interaction.Behaviors>
 				<core:EventTriggerBehavior EventName="Tapped">
 					<core:InvokeCommandAction Command="{Binding ViewLineDetailCommand}" />
@@ -16,8 +22,8 @@
 		</Grid>
 	</DataTemplate>
 	<DataTemplate x:Key="LineMiniItemTemplate">
-		<Grid MaxWidth="20" MaxHeight="20" Background="{Binding ColorLinea, Converter={StaticResource StringToColorConverter}}" MinWidth="20" MinHeight="20">
-			<TextBlock Margin="0" TextWrapping="Wrap" Text="{Binding NombreComercial}" VerticalAlignment="Bottom" HorizontalAlignment="Right" FontWeight="Bold" FontSize="13.333"/>
+		<Grid Margin="0" MaxWidth="30" MaxHeight="30" Background="{Binding ColorLinea, Converter={StaticResource StringToColorConverter}}" MinWidth="30" MinHeight="30">
+			<TextBlock Margin="0" TextWrapping="Wrap" Text="{Binding NombreComercial}" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="13.333"/>
 		</Grid>
 	</DataTemplate>
 	<DataTemplate x:Key="ListaParadaItemTemplate">
@@ -26,8 +32,15 @@
 				<RowDefinition Height="Auto"/>
 				<RowDefinition/>
 			</Grid.RowDefinitions>
-			<TextBlock x:Name="stopName" TextWrapping="Wrap" Text="{Binding NombreParada}" Grid.Row="0" Grid.RowSpan="1"/>
-            <StackPanel x:Name="linksContainer" Orientation="Horizontal" Grid.Row="1" Grid.RowSpan="1" />
+			<TextBlock x:Name="stopName" TextWrapping="Wrap" Text="{Binding NombreParada}" Grid.Row="0" Grid.RowSpan="1" FontSize="18.667"/>
+            <GridView Grid.Row="1" ItemsSource="{Binding Enlaces}" ItemTemplate="{StaticResource LineMiniItemTemplate}">
+                <GridView.ItemContainerStyle>
+                    <Style TargetType="GridViewItem">
+                        <Setter Property="Margin" Value="-5 0 -5 0"/>
+                    </Style>
+                </GridView.ItemContainerStyle>
+            </GridView>
+            <Image Grid.Row="1" Source="Assets/Logo.png" Width="30" Height="30" Visibility="{Binding HayBusDeLinea, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </Grid>
 	</DataTemplate>
     

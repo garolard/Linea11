@@ -7,12 +7,13 @@ using SaS.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Linea11.Services.Interface;
 using Linea11.Services;
 using Linea11.Services.Exceptions;
+using Windows.UI.ViewManagement;
+using Windows.UI.Xaml.Data;
 
 namespace Linea11.ViewModels
 {
@@ -174,6 +175,18 @@ namespace Linea11.ViewModels
             ViewLineDetailCommand = new RelayCommand(ViewLineDetail);
         }
 
+        #region Private methods
+        /*private void ChangeStatusBarForegroundColor()
+        {
+#if WINDOWS_PHONE_APP
+            var sb = StatusBar.GetForCurrentView();
+            var converter = App.Current.Resources["StringToColorConverter"] as IValueConverter;
+            if (converter != null)
+                sb.ForegroundColor = converter.Convert(_linea.ColorLinea, typeof(Windows.UI.Color), null, null) as Windows.UI.Color?;
+#endif
+        }*/
+        #endregion Private methods
+
         #region Navigation
         public override Task OnNavigatedFrom(Windows.UI.Xaml.Navigation.NavigationEventArgs args)
         {
@@ -187,6 +200,8 @@ namespace Linea11.ViewModels
 
         async public override Task OnNavigatedTo(Windows.UI.Xaml.Navigation.NavigationEventArgs args)
         {
+            //ChangeStatusBarForegroundColor();
+
             if (_linea != null && _paradasIda == null || _paradasVuelta == null)
             {
                 try

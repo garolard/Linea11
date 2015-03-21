@@ -4,32 +4,84 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Linea11.Views"
     xmlns:common="using:Linea11.Common"
+    xmlns:Interactivity="using:Microsoft.Xaml.Interactivity" xmlns:Core="using:Microsoft.Xaml.Interactions.Core" xmlns:Media="using:Microsoft.Xaml.Interactions.Media"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid x:Name="rootContent">        
-    	<Grid.RowDefinitions>
+    <common:BasePage.Resources>
+        <Storyboard x:Name="FadeOutLoadingRingAnimation">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" Storyboard.TargetName="progressRing">
+                <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0.2"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="progressRing">
+                <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0.2"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="progressRing">
+                <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="progressRing">
+                <DiscreteObjectKeyFrame KeyTime="0">
+                    <DiscreteObjectKeyFrame.Value>
+                        <Visibility>Visible</Visibility>
+                    </DiscreteObjectKeyFrame.Value>
+                </DiscreteObjectKeyFrame>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.5">
+                    <DiscreteObjectKeyFrame.Value>
+                        <Visibility>Collapsed</Visibility>
+                    </DiscreteObjectKeyFrame.Value>
+                </DiscreteObjectKeyFrame>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(ProgressRing.IsActive)" Storyboard.TargetName="progressRing">
+                <DiscreteObjectKeyFrame KeyTime="0">
+                    <DiscreteObjectKeyFrame.Value>
+                        <x:Boolean>True</x:Boolean>
+                    </DiscreteObjectKeyFrame.Value>
+                </DiscreteObjectKeyFrame>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.5">
+                    <DiscreteObjectKeyFrame.Value>
+                        <x:Boolean>False</x:Boolean>
+                    </DiscreteObjectKeyFrame.Value>
+                </DiscreteObjectKeyFrame>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+    </common:BasePage.Resources>
+    
+    <Grid x:Name="rootContent">
+        <Interactivity:Interaction.Behaviors>
+            <Core:DataTriggerBehavior Binding="{Binding IsBusy}" Value="false">
+                <Media:ControlStoryboardAction Storyboard="{StaticResource FadeOutLoadingRingAnimation}"/>
+            </Core:DataTriggerBehavior>
+        </Interactivity:Interaction.Behaviors>
+        <Grid.RowDefinitions>
     		<RowDefinition Height="Auto"/>
     		<RowDefinition/>
     	</Grid.RowDefinitions>
     	<StackPanel Orientation="Horizontal" Margin="20,0">
-    		<Grid x:Name="lineNameContainer" Height="40" Width="40" Background="{Binding ColorLinea, Converter={StaticResource StringToColorConverter}}">
+    		<Grid x:Name="lineNameContainer" Height="40" Width="40" 
+                  Background="{Binding ColorLinea, Converter={StaticResource StringToColorConverter}}">
     			<TextBlock x:Name="lineName" TextWrapping="Wrap" Text="{Binding NombreComercial}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="13.333"/>
     		</Grid>
     		<TextBlock x:Name="lineOriginText" TextWrapping="Wrap" Text="{Binding OrigenLinea, Converter={StaticResource StringToUpperConverter}}" VerticalAlignment="Center" FontSize="13.333" FontWeight="Bold" Margin="10,0,0,0"/>
     		<TextBlock TextWrapping="Wrap" Text=" - " VerticalAlignment="Center"/>
     		<TextBlock x:Name="lineDestinyText" TextWrapping="Wrap" Text="{Binding DestinoLinea, Converter={StaticResource StringToUpperConverter}}" VerticalAlignment="Center" FontSize="13.333" FontWeight="Bold" Margin="10,0,0,0"/>
     	</StackPanel>
-        <ListView x:Name="ForwardStopsListView" Grid.Row="1" Margin="20,10,20,0" ItemsSource="{Binding ParadasIda}" ItemTemplate="{StaticResource ListaParadaItemTemplate}" ContainerContentChanging="ForwardStopsListView_ContainerContentChanging">
+        <ListView x:Name="ForwardStopsListView" Grid.Row="1" Margin="20,10,20,0" ItemsSource="{Binding ParadasIda}" ItemTemplate="{StaticResource ListaParadaItemTemplate}">
             <ListView.ItemContainerTransitions>
                 <TransitionCollection>
-                    <EdgeUIThemeTransition />
+                    <EdgeUIThemeTransition Edge="Bottom" />
                 </TransitionCollection>
             </ListView.ItemContainerTransitions>
         </ListView>
-        <ProgressRing Grid.RowSpan="2" Width="60" Height="60" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" IsActive="{Binding IsBusy}"/>
+        <ProgressRing x:Name="progressRing" Grid.RowSpan="2" Width="60" Height="60" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" IsActive="True">
+            <ProgressRing.RenderTransform>
+                <CompositeTransform/>
+            </ProgressRing.RenderTransform>
+        </ProgressRing>
 
     </Grid>
 </common:BasePage>
